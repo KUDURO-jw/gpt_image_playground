@@ -24,4 +24,4 @@ export function getPlatformApiUrlPreview(baseUrl: string) {
   }
 }
 
-export const ALIPAY_QR_CODE_URL = readRuntimeEnv(import.meta.env.VITE_ALIPAY_QR_CODE_URL) || '/alipay-qrcode.png'
+export const ALIPAY_QR_CODE_URL = readRuntimeEnv(import.meta.env.VITE_ALIPAY_QR_CODE_URL) || '/alipay-qrcode.jpg'

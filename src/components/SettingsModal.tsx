@@ -1894,8 +1894,14 @@ export default function SettingsModal() {
                 {/* 本项目许可证与原作者版权声明保留在仓库 LICENSE 文件中。 */}
                 <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100">{PLATFORM_NAME}充值</h4>
                 <p className="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
-                  支付宝付款后，请联系平台管理员为你的专属 API Key 增加额度。
+                  使用支付宝扫码付款后，平台管理员会为你的专属 API Key 增加额度。
                 </p>
+                <div className="mt-5 w-full border border-blue-100 bg-blue-50 px-4 py-3 text-left dark:border-blue-400/20 dark:bg-blue-400/10">
+                  <p className="text-sm font-semibold text-blue-800 dark:text-blue-200">当前参考价格：0.5 元 / 张</p>
+                  <p className="mt-1 text-xs leading-5 text-blue-700/80 dark:text-blue-200/75">
+                    价格会随上游成本或活动调整；调整信息会在本页通知。已充值余额按充值时的规则使用。
+                  </p>
+                </div>
                 <div className="mt-6 flex h-52 w-52 items-center justify-center overflow-hidden rounded-2xl border border-dashed border-gray-300 bg-gray-50 text-sm text-gray-400 dark:border-white/[0.12] dark:bg-white/[0.03] dark:text-gray-500">
                   <img
                     src={ALIPAY_QR_CODE_URL}
@@ -1912,10 +1918,10 @@ export default function SettingsModal() {
                   <p className="font-semibold text-gray-800 dark:text-gray-100">充值流程</p>
                   <ol className="mt-1 list-decimal pl-5">
                     <li>先向平台申请或领取你的专属 API Key。</li>
-                    <li>使用支付宝付款，并备注 API Key 或账号。</li>
-                    <li>管理员确认到账后，在中转站后台为该 Key 增加额度。</li>
+                    <li>使用本页支付宝收款码付款，并在付款备注中填写 API Key 或账号。</li>
+                    <li>管理员确认到账后，为对应 Key 增加额度。</li>
                   </ol>
-                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-500">请勿索要或填写平台主密钥，主密钥不会下发给用户。</p>
+                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-500">收款主体显示为“土家手抓饼技术中心”，为本平台指定收款码。请勿索要或填写平台主密钥。</p>
                 </div>
 
 

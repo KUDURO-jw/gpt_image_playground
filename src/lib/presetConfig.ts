@@ -1,10 +1,12 @@
 import type { ApiProfile, AppSettings, CustomProviderDefinition } from '../types'
 import { readRuntimeEnv } from './runtimeEnv'
+import { getPlatformApiUrl, PLATFORM_BUILD } from './platformConfig'
 
 const RAW_SHOW_PRESET_CONFIG_ONLY = readRuntimeEnv(import.meta.env.VITE_SHOW_PRESET_CONFIG_ONLY)
-const SHOW_PRESET_CONFIG_ONLY = (RAW_SHOW_PRESET_CONFIG_ONLY || readRuntimeEnv(import.meta.env.VITE_SHOW_DEFAULT_CONFIG_ONLY)) === 'true'
+const SHOW_PRESET_CONFIG_ONLY = PLATFORM_BUILD || (RAW_SHOW_PRESET_CONFIG_ONLY || readRuntimeEnv(import.meta.env.VITE_SHOW_DEFAULT_CONFIG_ONLY)) === 'true'
 const LOCK_PRESET_CONFIG_PARAMS = readRuntimeEnv(import.meta.env.VITE_LOCK_PRESET_CONFIG_PARAMS) === 'true'
-const PREVENT_PRESET_CONFIG_DELETION = readRuntimeEnv(import.meta.env.VITE_PREVENT_PRESET_CONFIG_DELETION) === 'true'
+const PREVENT_PRESET_CONFIG_DELETION = PLATFORM_BUILD || readRuntimeEnv(import.meta.env.VITE_PREVENT_PRESET_CONFIG_DELETION) === 'true'
+const LOCK_PRESET_API_URL = PLATFORM_BUILD || readRuntimeEnv(import.meta.env.VITE_LOCK_PRESET_API_URL) === 'true'
 
 let presetProfiles: ApiProfile[] = []
 let presetProviders: CustomProviderDefinition[] = []
@@ -77,6 +79,10 @@ export function isPresetProfileLocked(id: string) {
   return isPresetConfigParamsLocked() && isPresetProfile(id)
 }
 
+export function isPresetProfileApiUrlLocked(id: string) {
+  return LOCK_PRESET_API_URL && isPresetProfile(id)
+}
+
 export function isPresetProviderLocked(id: string) {
   return isPresetConfigParamsLocked() && isPresetProvider(id)
 }
@@ -104,6 +110,7 @@ export function enforcePresetConfigPolicy(
     if (!preset) return profile.isDefault ? { ...profile, isDefault: undefined } : profile
     return {
       ...(paramsLocked ? preset : profile),
+      ...(LOCK_PRESET_API_URL ? { baseUrl: getPlatformApiUrl(preset.baseUrl) } : {}),
       apiKey: profile.apiKey,
       provider: paramsLocked || presetConfigOnly ? preset.provider : profile.provider,
       isDefault: profile.id === defaultPresetProfileId ? true : undefined,

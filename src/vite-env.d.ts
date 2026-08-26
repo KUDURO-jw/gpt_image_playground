@@ -12,6 +12,9 @@ interface ImportMetaEnv {
   readonly VITE_SHOW_PRESET_CONFIG_ONLY?: string
   readonly VITE_LOCK_PRESET_CONFIG_PARAMS?: string
   readonly VITE_PREVENT_PRESET_CONFIG_DELETION?: string
+  readonly VITE_LOCK_PRESET_API_URL?: string
+  readonly VITE_ALIPAY_QR_CODE_URL?: string
+  readonly VITE_PLATFORM_BUILD?: string
   readonly VITE_SHOW_DEFAULT_CONFIG_ONLY?: string
 }
 

@@ -10,6 +10,15 @@
       "apiMode": "images",
       "model": "gpt-image-2",
       "isDefault": true
+    },
+    {
+      "id": "platform-line-2",
+      "name": "线路二",
+      "description": "平台备用线路",
+      "provider": "openai",
+      "baseUrl": "https://meinianda.top",
+      "apiMode": "images",
+      "model": "gpt-image-2"
     }
   ]
 }

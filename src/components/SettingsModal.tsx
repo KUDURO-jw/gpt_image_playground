@@ -40,7 +40,7 @@ import {
   isPresetProfileLocked,
   isPresetProviderLocked,
 } from '../lib/presetConfig'
-import { ALIPAY_QR_CODE_URL, getPlatformApiUrlPreview, PLATFORM_NAME } from '../lib/platformConfig'
+import { getPlatformApiUrlPreview, PLATFORM_NAME } from '../lib/platformConfig'
 import { copyTextToClipboard, getClipboardFailureMessage } from '../lib/clipboard'
 import { createCustomProfileImportUrl } from '../lib/profileImportUrl'
 import { requestBrowserNotificationPermission, type BrowserNotificationPermissionResult } from '../lib/browserNotification'
@@ -1894,34 +1894,31 @@ export default function SettingsModal() {
                 {/* 本项目许可证与原作者版权声明保留在仓库 LICENSE 文件中。 */}
                 <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100">{PLATFORM_NAME}充值</h4>
                 <p className="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
-                  使用支付宝扫码付款后，平台管理员会为你的专属 API Key 增加额度。
+                  当前参考价格：0.5 元 / 张
                 </p>
-                <div className="mt-5 w-full border border-blue-100 bg-blue-50 px-4 py-3 text-left dark:border-blue-400/20 dark:bg-blue-400/10">
-                  <p className="text-sm font-semibold text-blue-800 dark:text-blue-200">当前参考价格：0.5 元 / 张</p>
-                  <p className="mt-1 text-xs leading-5 text-blue-700/80 dark:text-blue-200/75">
-                    价格会随上游成本或活动调整；调整信息会在本页通知。已充值余额按充值时的规则使用。
-                  </p>
-                </div>
-                <div className="mt-6 flex h-52 w-52 items-center justify-center overflow-hidden rounded-2xl border border-dashed border-gray-300 bg-gray-50 text-sm text-gray-400 dark:border-white/[0.12] dark:bg-white/[0.03] dark:text-gray-500">
-                  <img
-                    src={ALIPAY_QR_CODE_URL}
-                    alt="支付宝收款码"
-                    className="h-full w-full object-contain"
-                    onError={(event) => {
-                      event.currentTarget.style.display = 'none'
-                      event.currentTarget.parentElement?.classList.add('px-5')
-                      if (event.currentTarget.parentElement) event.currentTarget.parentElement.textContent = '请联系管理员获取支付宝收款码'
-                    }}
-                  />
-                </div>
+                <a
+                  href="https://e.tb.cn/h.8koys5ACmVKwvIe?tk=uGeITWCiXhy"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-5 inline-flex min-h-11 w-full items-center justify-center bg-orange-500 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+                >
+                  前往淘宝付款
+                </a>
                 <div className="mt-6 w-full rounded-2xl bg-gray-50 p-4 text-left text-sm leading-7 text-gray-600 dark:bg-white/[0.04] dark:text-gray-300">
-                  <p className="font-semibold text-gray-800 dark:text-gray-100">充值流程</p>
+                  <p className="font-semibold text-gray-800 dark:text-gray-100">首次充值</p>
                   <ol className="mt-1 list-decimal pl-5">
-                    <li>先向平台申请或领取你的专属 API Key。</li>
-                    <li>使用本页支付宝收款码付款，并在付款备注中填写 API Key 或账号。</li>
-                    <li>管理员确认到账后，为对应 Key 增加额度。</li>
+                    <li>打开淘宝链接完成付款，并保留订单截图。</li>
+                    <li>将付款截图、金额和付款时间发送至下方任一邮箱。</li>
+                    <li>管理员确认到账后，发放你的专属 API Key。</li>
                   </ol>
-                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-500">收款主体显示为“土家手抓饼技术中心”，为本平台指定收款码。请勿索要或填写平台主密钥。</p>
+                  <p className="mt-3 font-semibold text-gray-800 dark:text-gray-100">续费与活动通知</p>
+                  <p className="mt-1">已有 Key 的用户，付款后发送截图，并提供 API Key 末四位以便匹配。老客户可添加 QQ 获取不定期特价活动通知。</p>
+                  <div className="mt-3 border-t border-gray-200 pt-3 text-sm leading-6 dark:border-white/[0.08]">
+                    <p><span className="font-medium text-gray-800 dark:text-gray-100">邮箱：</span><a className="break-all text-blue-600 hover:underline dark:text-blue-400" href="mailto:vobinhkietoczw1152@gmail.com">vobinhkietoczw1152@gmail.com</a></p>
+                    <p><span className="font-medium text-gray-800 dark:text-gray-100">备用邮箱：</span><a className="break-all text-blue-600 hover:underline dark:text-blue-400" href="mailto:tujiashouzhuabing@foxmail.com">tujiashouzhuabing@foxmail.com</a></p>
+                    <p><span className="font-medium text-gray-800 dark:text-gray-100">QQ：</span>2242339458</p>
+                  </div>
+                  <p className="mt-3 text-xs text-gray-500 dark:text-gray-500">请勿发送平台主密钥或完整 API Key。</p>
                 </div>
 
 

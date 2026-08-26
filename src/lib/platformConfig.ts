@@ -23,5 +23,3 @@ export function getPlatformApiUrlPreview(baseUrl: string) {
     return 'https://线路...'
   }
 }
-
-export const ALIPAY_QR_CODE_URL = readRuntimeEnv(import.meta.env.VITE_ALIPAY_QR_CODE_URL) || '/alipay-qrcode.jpg'

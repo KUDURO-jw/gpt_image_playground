@@ -3,22 +3,13 @@
   "profiles": [
     {
       "id": "platform-line-1",
-      "name": "线路 1",
+      "name": "线路一",
       "description": "平台专用线路",
-      "provider": "openai",
-      "baseUrl": "https://api.jucodex.com",
-      "apiMode": "images",
-      "model": "gpt-image-2",
-      "isDefault": true
-    },
-    {
-      "id": "platform-line-2",
-      "name": "线路 2",
-      "description": "平台专用备用线路",
       "provider": "openai",
       "baseUrl": "https://task-api-1-cn.65535.space",
       "apiMode": "images",
-      "model": "gpt-image-2"
+      "model": "gpt-image-2",
+      "isDefault": true
     }
   ]
 }

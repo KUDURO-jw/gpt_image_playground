@@ -4,9 +4,8 @@ import { readRuntimeEnv } from './runtimeEnv'
 export const PLATFORM_NAME = 'AI 图片工坊'
 export const PLATFORM_BUILD = import.meta.env.PROD || readRuntimeEnv(import.meta.env.VITE_PLATFORM_BUILD) === 'true'
 
-/** 仅允许使用这两个中转站线路；地址不会在设置界面明文展示。 */
+/** 仅允许使用当前稳定中转线路；地址不会在设置界面明文展示。 */
 export const PLATFORM_API_URLS = [
-  'https://api.jucodex.com',
   'https://task-api-1-cn.65535.space',
 ] as const
 

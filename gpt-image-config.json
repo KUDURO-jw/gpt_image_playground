@@ -12,7 +12,7 @@
       "isDefault": true
     },
     {
-      "id": "platform-line-2",
+      "id": "platform-meinianda-backup",
       "name": "线路二",
       "description": "平台备用线路",
       "provider": "openai",

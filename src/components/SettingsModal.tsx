@@ -1897,17 +1897,17 @@ export default function SettingsModal() {
                   当前参考价格：0.5 元 / 张
                 </p>
                 <a
-                  href="https://e.tb.cn/h.8koys5ACmVKwvIe?tk=uGeITWCiXhy"
+                  href="https://m.tb.cn/h.8OQrQK0?tk=PiOQT3ddlVT"
                   target="_blank"
                   rel="noreferrer"
                   className="mt-5 inline-flex min-h-11 w-full items-center justify-center bg-orange-500 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
                 >
-                  前往淘宝付款
+                  前往闲鱼付款
                 </a>
                 <div className="mt-6 w-full rounded-2xl bg-gray-50 p-4 text-left text-sm leading-7 text-gray-600 dark:bg-white/[0.04] dark:text-gray-300">
                   <p className="font-semibold text-gray-800 dark:text-gray-100">首次充值</p>
                   <ol className="mt-1 list-decimal pl-5">
-                    <li>打开淘宝链接完成付款，并保留订单截图。</li>
+                    <li>打开闲鱼链接完成付款，并保留订单截图。</li>
                     <li>将付款截图、金额和付款时间发送至下方任一邮箱。</li>
                     <li>管理员确认到账后，发放你的专属 API Key。</li>
                   </ol>

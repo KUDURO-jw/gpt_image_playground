@@ -1914,8 +1914,7 @@ export default function SettingsModal() {
                   <p className="mt-3 font-semibold text-gray-800 dark:text-gray-100">续费与活动通知</p>
                   <p className="mt-1">已有 Key 的用户，付款后发送截图，并提供 API Key 末四位以便匹配。老客户可添加 QQ 获取不定期特价活动通知。</p>
                   <div className="mt-3 border-t border-gray-200 pt-3 text-sm leading-6 dark:border-white/[0.08]">
-                    <p><span className="font-medium text-gray-800 dark:text-gray-100">邮箱：</span><a className="break-all text-blue-600 hover:underline dark:text-blue-400" href="mailto:vobinhkietoczw1152@gmail.com">vobinhkietoczw1152@gmail.com</a></p>
-                    <p><span className="font-medium text-gray-800 dark:text-gray-100">备用邮箱：</span><a className="break-all text-blue-600 hover:underline dark:text-blue-400" href="mailto:tujiashouzhuabing@foxmail.com">tujiashouzhuabing@foxmail.com</a></p>
+                    <p><span className="font-medium text-gray-800 dark:text-gray-100">邮箱：</span><a className="break-all text-blue-600 hover:underline dark:text-blue-400" href="mailto:tujiashouzhuabing@foxmail.com">tujiashouzhuabing@foxmail.com</a></p>
                     <p><span className="font-medium text-gray-800 dark:text-gray-100">QQ：</span>2242339458</p>
                   </div>
                   <p className="mt-3 text-xs text-gray-500 dark:text-gray-500">请勿发送平台主密钥或完整 API Key。</p>

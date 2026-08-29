@@ -200,6 +200,7 @@ export default function SettingsModal() {
   const [isExportingData, setIsExportingData] = useState(false)
   const [isImportingData, setIsImportingData] = useState(false)
   const [isImportingJson, setIsImportingJson] = useState(false)
+  const [usageState, setUsageState] = useState<{ status: 'idle' | 'loading' | 'success' | 'error', message?: string, totalAvailable?: number | null, totalUsed?: number | null, totalGranted?: number | null, unlimitedQuota?: boolean }>(() => ({ status: 'idle' }))
   const [draggedProfileId, setDraggedProfileId] = useState<string | null>(null)
   const [dragOverProfileId, setDragOverProfileId] = useState<string | null>(null)
   const [dragDropPosition, setDragDropPosition] = useState<'before' | 'after' | null>(null)
@@ -242,6 +243,32 @@ export default function SettingsModal() {
   const apiProxyEnabled = apiProxyAvailable && activeProfileApiProxyEligible && apiProxyChecked
   const defaultProviderOrder = ['openai', 'sb2api-async', 'fal', ...draft.customProviders.map(p => p.id)]
   const providerOrder = draft.providerOrder || defaultProviderOrder
+  const usageRoute = activeProfile.baseUrl.trim().replace(/\/+$/, '') === 'https://meinianda.top' ? 'meinianda' : 'unsupported'
+
+  const queryUsage = async () => {
+    if (usageRoute !== 'meinianda') {
+      setUsageState({ status: 'error', message: '当前线路暂不支持独立额度查询' })
+      return
+    }
+    const apiKey = activeProfile.apiKey.trim()
+    if (!apiKey) {
+      setUsageState({ status: 'error', message: '请先填写你的专属 API Key' })
+      return
+    }
+    setUsageState({ status: 'loading' })
+    try {
+      const response = await fetch('/api/usage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ route: usageRoute, apiKey }),
+      })
+      const result = await response.json() as { error?: string, totalAvailable?: number | null, totalUsed?: number | null, totalGranted?: number | null, unlimitedQuota?: boolean }
+      if (!response.ok) throw new Error(result.error || '额度查询失败')
+      setUsageState({ status: 'success', ...result })
+    } catch (error) {
+      setUsageState({ status: 'error', message: error instanceof Error ? error.message : '额度查询失败，请稍后重试' })
+    }
+  }
 
   const unorderedProviderOptions = [
     { label: 'OpenAI 兼容接口', value: 'openai', draggable: true },
@@ -310,6 +337,10 @@ export default function SettingsModal() {
   }))
 
   const wasSettingsOpenRef = useRef(false)
+
+  useEffect(() => {
+    setUsageState({ status: 'idle' })
+  }, [activeProfile.id, activeProfile.apiKey, activeProfile.baseUrl])
 
   useEffect(() => {
     if (!showSettings) {
@@ -1544,7 +1575,38 @@ export default function SettingsModal() {
                 </div>
               </div>
 
-              {/* 6. API 接口（Images/Responses） */}
+              {/* 6. 额度查询 */}
+              <div className="rounded-2xl border border-blue-100/70 bg-blue-50/40 p-4 dark:border-blue-500/15 dark:bg-blue-500/5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100">我的额度</h4>
+                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">使用当前填写的专属 API Key 查询，不会保存 Key。</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => void queryUsage()}
+                    disabled={usageState.status === 'loading'}
+                    className="rounded-xl bg-blue-500 px-3.5 py-2 text-sm font-medium text-white transition hover:bg-blue-600 disabled:cursor-wait disabled:opacity-60"
+                  >
+                    {usageState.status === 'loading' ? '查询中...' : '查询额度'}
+                  </button>
+                </div>
+                {usageRoute === 'unsupported' && (
+                  <p className="mt-3 text-xs text-amber-600 dark:text-amber-400">当前线路暂不支持独立额度查询，请以中转站后台为准。</p>
+                )}
+                {usageState.status === 'error' && (
+                  <p className="mt-3 text-xs text-red-600 dark:text-red-400">{usageState.message}</p>
+                )}
+                {usageState.status === 'success' && (
+                  <div className="mt-3 grid grid-cols-1 gap-2 text-xs text-gray-600 dark:text-gray-300 sm:grid-cols-3">
+                    <div className="rounded-xl bg-white/70 p-3 dark:bg-white/[0.05]"><span className="block text-gray-500 dark:text-gray-500">剩余额度</span><strong className="mt-1 block text-sm text-gray-800 dark:text-gray-100">{usageState.unlimitedQuota ? '不限额' : (usageState.totalAvailable ?? 0).toLocaleString()}</strong></div>
+                    <div className="rounded-xl bg-white/70 p-3 dark:bg-white/[0.05]"><span className="block text-gray-500 dark:text-gray-500">已用额度</span><strong className="mt-1 block text-sm text-gray-800 dark:text-gray-100">{(usageState.totalUsed ?? 0).toLocaleString()}</strong></div>
+                    <div className="rounded-xl bg-white/70 p-3 dark:bg-white/[0.05]"><span className="block text-gray-500 dark:text-gray-500">已发放额度</span><strong className="mt-1 block text-sm text-gray-800 dark:text-gray-100">{(usageState.totalGranted ?? 0).toLocaleString()}</strong></div>
+                  </div>
+                )}
+              </div>
+
+              {/* 7. API 接口（Images/Responses） */}
               {activeProfile.provider === 'openai' && (
                 <div className="block">
                   <span className="mb-1.5 block text-sm text-gray-600 dark:text-gray-300">API 接口</span>

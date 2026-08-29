@@ -52,6 +52,7 @@ import { showBrowserNotification } from './lib/browserNotification'
 import { IMAGE_FETCH_CORS_HINT } from './lib/imageApiShared'
 import { getFalErrorMessage, getFalQueuedImageResult } from './lib/falAiImageApi'
 import { getCustomQueuedImageResult } from './lib/openaiCompatibleImageApi'
+import { recordLineOneUsage } from './lib/lineOneUsage'
 import { validateMaskMatchesImage } from './lib/canvasImage'
 import { orderInputImagesForMask } from './lib/mask'
 import { getChangedParams, normalizeParamsForSettings } from './lib/paramCompatibility'
@@ -2697,6 +2698,7 @@ async function executeAgentRound(
         ...createTaskDonePatch(latestBeforeUpdate, Date.now()),
         agentToolAction: image.action,
       })
+      recordLineOneUsage(imageProfile, taskId, 1)
       useStore.getState().setTaskStreamPreview(taskId)
       return { taskId, committed: true }
     }
@@ -3252,6 +3254,7 @@ async function executeAgentRound(
         useStore.getState().setTasks([task, ...useStore.getState().tasks])
         attachTaskToAgentRound(task.id)
         await putTask(task)
+        recordLineOneUsage(imageProfile, task.id, 1)
       }
 
       if (result.rawResponsePayload && streamingTaskIds.length > 0) {
@@ -3642,6 +3645,7 @@ async function executeTask(taskId: string) {
       falRecoverable: false,
       customRecoverable: false,
     })
+    recordLineOneUsage(activeProfile, taskId, outputIds.length)
     void deleteUnreferencedImageIds(partialImageIdsToClean)
 
     const failedCount = result.failedRequests?.length ?? 0

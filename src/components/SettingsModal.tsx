@@ -40,6 +40,7 @@ import {
   isPresetProfileLocked,
   isPresetProviderLocked,
 } from '../lib/presetConfig'
+import { isLineOneUsageProfile } from '../lib/lineOneUsage'
 import { getPlatformApiUrlPreview, PLATFORM_NAME } from '../lib/platformConfig'
 import { copyTextToClipboard, getClipboardFailureMessage } from '../lib/clipboard'
 import { createCustomProfileImportUrl } from '../lib/profileImportUrl'
@@ -243,10 +244,12 @@ export default function SettingsModal() {
   const apiProxyEnabled = apiProxyAvailable && activeProfileApiProxyEligible && apiProxyChecked
   const defaultProviderOrder = ['openai', 'sb2api-async', 'fal', ...draft.customProviders.map(p => p.id)]
   const providerOrder = draft.providerOrder || defaultProviderOrder
-  const usageRoute = activeProfile.baseUrl.trim().replace(/\/+$/, '') === 'https://meinianda.top' ? 'meinianda' : 'unsupported'
+  const usageRoute = isLineOneUsageProfile(activeProfile)
+    ? 'line-one'
+    : activeProfile.baseUrl.trim().replace(/\/+$/, '') === 'https://meinianda.top' ? 'meinianda' : 'unsupported'
 
   const queryUsage = async () => {
-    if (usageRoute !== 'meinianda') {
+    if (usageRoute === 'unsupported') {
       setUsageState({ status: 'error', message: '当前线路暂不支持独立额度查询' })
       return
     }
@@ -257,10 +260,10 @@ export default function SettingsModal() {
     }
     setUsageState({ status: 'loading' })
     try {
-      const response = await fetch('/api/usage', {
+      const response = await fetch(usageRoute === 'line-one' ? '/api/line-one-usage' : '/api/usage', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ route: usageRoute, apiKey }),
+        body: JSON.stringify(usageRoute === 'line-one' ? { action: 'lookup', apiKey } : { route: usageRoute, apiKey }),
       })
       const result = await response.json() as { error?: string, totalAvailable?: number | null, totalUsed?: number | null, totalGranted?: number | null, unlimitedQuota?: boolean }
       if (!response.ok) throw new Error(result.error || '额度查询失败')
@@ -1597,7 +1600,12 @@ export default function SettingsModal() {
                 {usageState.status === 'error' && (
                   <p className="mt-3 text-xs text-red-600 dark:text-red-400">{usageState.message}</p>
                 )}
-                {usageState.status === 'success' && (
+                {usageState.status === 'success' && usageRoute === 'line-one' && (
+                  <div className="mt-3 text-xs text-gray-600 dark:text-gray-300">
+                    <div className="rounded-xl bg-white/70 p-3 dark:bg-white/[0.05]"><span className="block text-gray-500 dark:text-gray-500">累计成功生成</span><strong className="mt-1 block text-sm text-gray-800 dark:text-gray-100">{(usageState.totalUsed ?? 0).toLocaleString()} 张</strong></div>
+                  </div>
+                )}
+                {usageState.status === 'success' && usageRoute === 'meinianda' && (
                   <div className="mt-3 grid grid-cols-1 gap-2 text-xs text-gray-600 dark:text-gray-300 sm:grid-cols-3">
                     <div className="rounded-xl bg-white/70 p-3 dark:bg-white/[0.05]"><span className="block text-gray-500 dark:text-gray-500">剩余额度</span><strong className="mt-1 block text-sm text-gray-800 dark:text-gray-100">{usageState.unlimitedQuota ? '不限额' : (usageState.totalAvailable ?? 0).toLocaleString()}</strong></div>
                     <div className="rounded-xl bg-white/70 p-3 dark:bg-white/[0.05]"><span className="block text-gray-500 dark:text-gray-500">已用额度</span><strong className="mt-1 block text-sm text-gray-800 dark:text-gray-100">{(usageState.totalUsed ?? 0).toLocaleString()}</strong></div>

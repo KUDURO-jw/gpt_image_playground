@@ -3,7 +3,7 @@
   "profiles": [
     {
       "id": "platform-line-1",
-      "name": "线路一",
+      "name": "数字人",
       "description": "平台专用线路",
       "provider": "openai",
       "baseUrl": "https://task-api-1-cn.65535.space",
@@ -13,7 +13,7 @@
     },
     {
       "id": "platform-meinianda-backup",
-      "name": "线路二",
+      "name": "麦当劳",
       "description": "平台备用线路",
       "provider": "openai",
       "baseUrl": "https://meinianda.top",

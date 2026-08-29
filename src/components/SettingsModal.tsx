@@ -1592,7 +1592,7 @@ export default function SettingsModal() {
                   </button>
                 </div>
                 {usageRoute === 'unsupported' && (
-                  <p className="mt-3 text-xs text-amber-600 dark:text-amber-400">当前线路暂不支持独立额度查询，请以中转站后台为准。</p>
+                  <p className="mt-3 text-xs text-amber-600 dark:text-amber-400">当前线路暂不支持独立额度查询，请以服务后台为准。</p>
                 )}
                 {usageState.status === 'error' && (
                   <p className="mt-3 text-xs text-red-600 dark:text-red-400">{usageState.message}</p>

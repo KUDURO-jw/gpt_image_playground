@@ -2047,7 +2047,7 @@ export default function SettingsModal() {
               </button>
               <img
                 src="/alipay-payment.jpg"
-                alt="支付宝收款二维码，请核对收款方名称后扫码"
+                alt="支付宝收款二维码"
                 className="w-full object-contain"
               />
             </div>

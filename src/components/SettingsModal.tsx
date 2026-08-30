@@ -201,6 +201,7 @@ export default function SettingsModal() {
   const [isExportingData, setIsExportingData] = useState(false)
   const [isImportingData, setIsImportingData] = useState(false)
   const [isImportingJson, setIsImportingJson] = useState(false)
+  const [showPaymentQr, setShowPaymentQr] = useState(false)
   const [usageState, setUsageState] = useState<{ status: 'idle' | 'loading' | 'success' | 'error', message?: string, totalAvailable?: number | null, totalUsed?: number | null, totalGranted?: number | null, unlimitedQuota?: boolean }>(() => ({ status: 'idle' }))
   const [draggedProfileId, setDraggedProfileId] = useState<string | null>(null)
   const [dragOverProfileId, setDragOverProfileId] = useState<string | null>(null)
@@ -678,6 +679,7 @@ export default function SettingsModal() {
   }
 
   useCloseOnEscape(showSettings && !dataTransferMode, handleClose)
+  useCloseOnEscape(showPaymentQr, () => setShowPaymentQr(false))
   usePreventBackgroundScroll(showSettings, showZipDownloadRouteManager ? zipDownloadRouteScrollBoundaryRef : showCustomProviderImport ? customProviderScrollBoundaryRef : settingsScrollBoundaryRef)
 
   if (!showSettings) return null
@@ -1966,18 +1968,17 @@ export default function SettingsModal() {
                 <p className="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
                   当前参考价格：0.5 元 / 张
                 </p>
-                <a
-                  href="https://m.tb.cn/h.8OQrQK0?tk=PiOQT3ddlVT"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-5 inline-flex min-h-11 w-full items-center justify-center bg-orange-500 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+                <button
+                  type="button"
+                  onClick={() => setShowPaymentQr(true)}
+                  className="mt-5 inline-flex min-h-11 w-full items-center justify-center bg-blue-500 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
                 >
-                  前往闲鱼付款
-                </a>
+                  前往支付宝付款
+                </button>
                 <div className="mt-6 w-full rounded-2xl bg-gray-50 p-4 text-left text-sm leading-7 text-gray-600 dark:bg-white/[0.04] dark:text-gray-300">
                   <p className="font-semibold text-gray-800 dark:text-gray-100">首次充值</p>
                   <ol className="mt-1 list-decimal pl-5">
-                    <li>打开闲鱼链接完成付款，并保留订单截图。</li>
+                    <li>点击上方按钮打开支付宝收款二维码，扫码完成付款并保留订单截图。</li>
                     <li>将付款截图、金额和付款时间发送至下方任一邮箱。</li>
                     <li>管理员确认到账后，发放你的专属 API Key。</li>
                   </ol>
@@ -2023,6 +2024,34 @@ export default function SettingsModal() {
             }}
             onSave={saveCustomProvider}
           />
+        )}
+        {showPaymentQr && (
+          <div
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+            role="dialog"
+            aria-modal="true"
+            aria-label="支付宝收款二维码"
+            onClick={() => setShowPaymentQr(false)}
+          >
+            <div
+              className="relative max-h-[90vh] w-full max-w-lg overflow-auto rounded-2xl bg-white p-4 shadow-2xl dark:bg-gray-900"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setShowPaymentQr(false)}
+                className="absolute right-3 top-3 rounded-full bg-black/10 px-3 py-1 text-xl leading-none text-gray-700 hover:bg-black/20 dark:bg-white/10 dark:text-gray-200 dark:hover:bg-white/20"
+                aria-label="关闭支付宝收款二维码"
+              >
+                <CloseIcon className="h-5 w-5" />
+              </button>
+              <img
+                src="/alipay-payment.jpg"
+                alt="支付宝收款二维码，请核对收款方名称后扫码"
+                className="w-full object-contain"
+              />
+            </div>
+          </div>
         )}
         {profileTouchDragPreview && createPortal(
           <div
